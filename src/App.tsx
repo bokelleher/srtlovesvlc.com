@@ -1,3 +1,4 @@
+import { FeatureIcon, type IconName } from './components/FeatureIcon'
 import { FlowDiagram } from './components/FlowDiagram'
 import { HeroCta } from './components/HeroCta'
 import { MenuBarStage } from './components/MenuBarStage'
@@ -6,29 +7,35 @@ import { usePlatform } from './hooks/usePlatform'
 import { useReveal } from './hooks/useReveal'
 import { WINDOWS_BUY_URL } from './links'
 
-const features = [
+const features: Array<{ title: string; body: string; icon: IconName }> = [
   {
     title: 'Claims srt://',
+    icon: 'link',
     body: 'Register as the handler for SRT links on macOS. Click a link in mail, chat, or a runbook — the helper takes it from there.',
   },
   {
     title: 'Launches your VLC',
+    icon: 'play',
     body: 'Hands the URL to the VLC you already trust. Does not embed libvlc. Playback stays in VLC’s hands.',
   },
   {
     title: 'Recent streams',
+    icon: 'clock',
     body: 'Re-open the last few destinations from the menu bar without digging through history elsewhere.',
   },
   {
     title: 'Reuse one VLC',
+    icon: 'layers',
     body: 'Optional --one-instance behavior so a new srt:// opens in the running player instead of spawning another copy.',
   },
   {
     title: 'Latency control',
+    icon: 'gauge',
     body: 'Set a default SRT latency in milliseconds for lab and contribution paths that need a known buffer.',
   },
   {
     title: 'Launch at login',
+    icon: 'power',
     body: 'Keep the helper ready on macOS via a Login Item — so the scheme is claimed when you need it.',
   },
 ]
@@ -110,6 +117,9 @@ export default function App() {
           <div className="feature-grid">
             {features.map((f) => (
               <article key={f.title} className="feature-card reveal">
+                <span className="feature-card__icon">
+                  <FeatureIcon name={f.icon} />
+                </span>
                 <h3>{f.title}</h3>
                 <p>{f.body}</p>
               </article>
@@ -132,19 +142,22 @@ export default function App() {
               you already use.
             </p>
           </div>
-          <div className="platform-cards">
+          <div className="platform-cards" id="pricing">
             <div className="platform-card platform-card--live">
               <div className="platform-card__os">macOS</div>
+              <div className="platform-card__price">Price TBA · Mac App Store</div>
               <div className="platform-card__status">Menu bar · Coming to Mac App Store</div>
               <p>Scheme handler, Login Item, recent streams, latency, reuse VLC.</p>
             </div>
             <div className="platform-card platform-card--live">
               <div className="platform-card__os">Windows</div>
-              <div className="platform-card__status">Tray · Available now · $1.99</div>
+              <div className="platform-card__price">$1.99 · one-time purchase</div>
+              <div className="platform-card__status">Tray · Available now</div>
               <p>
                 Claims <code className="inline-code">srt://</code> and launches
                 your installed VLC. Requires .NET 8 Desktop Runtime and VLC.
-                Purchase includes the installer download.
+                After checkout you land on a private download page for the
+                installer.
               </p>
               <div className="platform-card__actions">
                 <a
@@ -153,7 +166,7 @@ export default function App() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Buy for Windows — $1.99
+                  Buy for Windows · $1.99
                 </a>
                 <a className="btn btn--ghost" href="/eula.html">
                   EULA
@@ -161,19 +174,6 @@ export default function App() {
               </div>
             </div>
           </div>
-        </div>
-      </section>
-
-      <section className="section band cta-lite" aria-labelledby="store-title">
-        <div className="container reveal">
-          <h2 id="store-title" className="h2">
-            Get the app
-          </h2>
-          <p className="lede">
-            Windows: buy direct for $1.99 — after checkout you land on a private
-            download page for the installer. Mac: proprietary via the Mac App
-            Store; the listing link will land here when it is live.
-          </p>
         </div>
       </section>
 

@@ -219,11 +219,151 @@ html.js .stage.is-visible .stage__popover {
   margin: 0;
 }
 
-.flow svg {
-  width: 100%;
-  height: auto;
+.flow__steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 64px 1fr 64px 1fr;
+  align-items: center;
+}
+
+.flow__card {
+  display: grid;
+  align-self: stretch;
+  align-content: center;
+  justify-items: center;
+  gap: 6px;
+  padding: 26px 20px;
+  text-align: center;
   border-radius: var(--radius);
-  box-shadow: var(--shadow);
+  background: linear-gradient(180deg, #1c2230, #151a24);
+  border: 1px solid var(--border);
+}
+
+.flow__mono {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 1.05rem;
+  color: var(--mint);
+}
+
+.flow__mono--faint {
+  font-size: 0.78rem;
+  color: var(--faint);
+  margin-top: 4px;
+}
+
+.flow__title {
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.flow__sub {
+  color: var(--muted);
+  font-size: 0.9rem;
+  max-width: 26ch;
+}
+
+.flow__icon {
+  border-radius: 11px;
+  box-shadow: 0 0 0 1px rgba(42, 58, 82, 0.85);
+}
+
+.flow__player {
+  width: 48px;
+  height: 32px;
+  color: var(--mint);
+}
+
+.flow__player svg {
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 1.5;
+}
+
+.flow__link {
+  position: relative;
+  height: 2px;
+  background: linear-gradient(90deg, var(--mint), var(--accent));
+  opacity: 0.6;
+}
+
+.flow__dot {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--mint);
+  box-shadow: 0 0 8px rgba(124, 240, 208, 0.8);
+  transform: translate(-50%, -50%);
+  opacity: 0;
+}
+
+@keyframes flow-dot-h {
+  0% {
+    left: 0;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  100% {
+    left: 100%;
+    opacity: 1;
+  }
+}
+
+@keyframes flow-dot-v {
+  0% {
+    top: 0;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  100% {
+    top: 100%;
+    opacity: 1;
+  }
+}
+
+/* Connectors are the 2nd and 4th list items. */
+html.js .flow.is-visible .flow__link:nth-of-type(2) .flow__dot {
+  animation: flow-dot-h 0.9s var(--ease) 0.2s both;
+}
+
+html.js .flow.is-visible .flow__link:nth-of-type(4) .flow__dot {
+  animation: flow-dot-h 0.9s var(--ease) 1.1s both;
+}
+
+@media (max-width: 760px) {
+  .flow__steps {
+    grid-template-columns: 1fr;
+  }
+  .flow__link {
+    width: 2px;
+    height: 40px;
+    margin: 0 auto;
+    background: linear-gradient(180deg, var(--mint), var(--accent));
+  }
+  .flow__dot {
+    left: 50%;
+    top: 0;
+  }
+  html.js .flow.is-visible .flow__link:nth-of-type(2) .flow__dot,
+  html.js .flow.is-visible .flow__link:nth-of-type(4) .flow__dot {
+    animation-name: flow-dot-v;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flow__dot {
+    display: none;
+  }
 }
 
 .flow figcaption {
@@ -257,9 +397,29 @@ html.js .stage.is-visible .stage__popover {
 .feature-card {
   padding: 22px 20px;
   border-radius: var(--radius);
-  background: var(--surface);
+  background: linear-gradient(180deg, #1c2230, #151a24);
   border: 1px solid var(--border);
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.03) inset;
+  transition:
+    transform 0.16s var(--ease),
+    border-color 0.16s ease;
+}
+
+.feature-card:hover,
+.feature-card:focus-within {
+  transform: translateY(-2px);
+  border-color: rgba(124, 240, 208, 0.35);
+}
+
+.feature-card__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  margin-bottom: 12px;
+  border-radius: 10px;
+  background: var(--mint-soft);
+  color: var(--mint);
 }
 
 .feature-card h3 {
@@ -308,6 +468,13 @@ html.js .stage.is-visible .stage__popover {
   font-weight: 700;
   font-size: 1.1rem;
   letter-spacing: -0.02em;
+}
+
+.platform-card__price {
+  margin-top: 2px;
+  font-size: 0.85rem;
+  color: var(--text);
+  font-weight: 500;
 }
 
 .platform-card__status {
@@ -379,10 +546,6 @@ html.js .stage.is-visible .stage__popover {
 
 .footer__links a:hover {
   color: var(--mint, #7cf0d0);
-}
-
-.cta-lite .lede {
-  max-width: 62ch;
 }
 
 .footer {
