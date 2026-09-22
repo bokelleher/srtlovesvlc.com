@@ -17,10 +17,8 @@ if [[ ! -d "$DIST" ]]; then
   echo "Build first: npm run build" >&2
   exit 1
 fi
-# Keep server-only fulfillment assets (private download path, legal pages).
+# Keep the server-only fulfillment path. Legal pages now ship from public/ with every build.
 rsync -avz --delete \
   --exclude 'downloads/' \
-  --exclude 'eula.html' \
-  --exclude 'privacy.html' \
   "$DIST/" "$DEST/"
 echo "Deployed $DIST -> $DEST"
