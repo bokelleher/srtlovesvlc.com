@@ -155,7 +155,8 @@ html.js .stage.is-visible .stage__popover {
   .stage__chip {
     display: none;
   }
-  html.js .stage__popover {
+  html.js .stage__popover,
+  html.js .stage.is-visible .stage__popover {
     opacity: 1;
     animation: none;
   }
