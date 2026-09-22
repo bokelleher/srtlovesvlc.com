@@ -129,7 +129,7 @@ code,
   margin-bottom: 40px;
 }
 
-.reveal {
+html.js .reveal {
   opacity: 0;
   transform: translateY(18px);
   transition:
@@ -137,7 +137,7 @@ code,
     transform 0.7s var(--ease);
 }
 
-.reveal.is-visible {
+html.js .reveal.is-visible {
   opacity: 1;
   transform: none;
 }
