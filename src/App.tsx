@@ -1,6 +1,6 @@
 import { FlowDiagram } from './components/FlowDiagram'
 import { HeroCta } from './components/HeroCta'
-import { MenuPreview } from './components/MenuPreview'
+import { MenuBarStage } from './components/MenuBarStage'
 import { Nav } from './components/Nav'
 import { usePlatform } from './hooks/usePlatform'
 import { useReveal } from './hooks/useReveal'
@@ -74,7 +74,7 @@ export default function App() {
             </ul>
             <HeroCta platform={platform} />
           </div>
-          <MenuPreview />
+          <MenuBarStage />
         </div>
       </section>
 

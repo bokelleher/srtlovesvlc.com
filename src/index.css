@@ -49,14 +49,40 @@ body {
   margin: 0;
   min-height: 100vh;
   font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
-  background:
-    radial-gradient(1200px 600px at 10% -10%, rgba(255, 77, 109, 0.12), transparent 55%),
-    radial-gradient(900px 500px at 90% 0%, rgba(124, 240, 208, 0.08), transparent 50%),
-    var(--bg);
+  background: var(--bg);
   color: var(--text);
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+/* Two soft glows that drift slowly. The only continuous motion on the page. */
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  inset: -20%;
+  z-index: -1;
+  pointer-events: none;
+  animation: glow-drift 30s ease-in-out infinite alternate;
+}
+
+body::before {
+  background: radial-gradient(1200px 600px at 20% 5%, rgba(255, 77, 109, 0.12), transparent 55%);
+}
+
+body::after {
+  background: radial-gradient(900px 500px at 85% 10%, rgba(124, 240, 208, 0.08), transparent 50%);
+  animation-direction: alternate-reverse;
+}
+
+@keyframes glow-drift {
+  from {
+    transform: translate(0, 0);
+  }
+  to {
+    transform: translate(40px, 30px);
+  }
 }
 
 a {
