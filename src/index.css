@@ -264,13 +264,24 @@ html.js .reveal.is-visible {
   color: var(--muted);
 }
 
-.hero__store {
+.hero__cta {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   margin: 0;
-  color: var(--faint);
-  font-size: 0.95rem;
+}
+
+.pill--soon {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: 1px solid rgba(255, 77, 109, 0.3);
 }
 
 .badge {

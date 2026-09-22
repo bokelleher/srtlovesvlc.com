@@ -1,10 +1,10 @@
 import { FlowDiagram } from './components/FlowDiagram'
+import { HeroCta } from './components/HeroCta'
 import { MenuPreview } from './components/MenuPreview'
 import { Nav } from './components/Nav'
+import { usePlatform } from './hooks/usePlatform'
 import { useReveal } from './hooks/useReveal'
-
-const WINDOWS_BUY_URL =
-  'https://buy.stripe.com/5kQ4gA8WP4Me7Cs00gafS00'
+import { WINDOWS_BUY_URL } from './links'
 
 const features = [
   {
@@ -35,6 +35,7 @@ const features = [
 
 export default function App() {
   useReveal()
+  const platform = usePlatform()
 
   return (
     <>
@@ -53,16 +54,15 @@ export default function App() {
                 alt="SRT loves VLC"
               />
             </div>
-            <p className="eyebrow">macOS menu-bar helper</p>
+            <p className="eyebrow">macOS and Windows helper</p>
             <h1 id="hero-title">
               SRT links deserve a{' '}
               <span className="accent">straight path</span> into VLC
             </h1>
             <p className="hero__lede">
-              SRT ❤ VLC sits in the menu bar, claims the{' '}
+              SRT ❤ VLC sits in your menu bar or tray, claims the{' '}
               <code className="inline-code">srt://</code> scheme, and launches
-              the VLC you already use. No embedded player. No fake download
-              button here — it&apos;s coming to the Mac App Store.
+              the VLC you already use. No embedded player.
             </p>
             <ul className="hero__chips" aria-label="Highlights">
               <li>srt:// handler</li>
@@ -72,10 +72,7 @@ export default function App() {
               <li>Latency</li>
               <li>Login Item</li>
             </ul>
-            <p className="hero__store">
-              <span className="badge">Coming soon</span>
-              Mac App Store · proprietary
-            </p>
+            <HeroCta platform={platform} />
           </div>
           <MenuPreview />
         </div>
