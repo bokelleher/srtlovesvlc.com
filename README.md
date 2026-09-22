@@ -70,6 +70,16 @@ sudo rsync -a --delete --exclude 'downloads/' --chown=techex:techex dist/ /var/w
 
 Static files go live on copy; there is nothing to restart.
 
+### Mac DMG release (outside the App Store)
+
+`ops/mac-release-dmg.sh` runs on the Mac and produces a Developer ID signed, notarized and stapled DMG in `release/`. It archives the Xcode project, exports with the `developer-id` method, refuses to continue if Hardened Runtime is off, builds the DMG with an Applications shortcut, signs it, submits it to Apple with `notarytool --wait`, staples the ticket, runs a Gatekeeper assessment and writes a sha256. Requires a "Developer ID Application" certificate in the keychain and a stored notarytool profile (setup steps are in the script header).
+
+```bash
+TEAM_ID=TEAMID1234 ./ops/mac-release-dmg.sh
+```
+
+The script ends by printing the commands to publish the DMG under a tokenised `downloads/m/<token>/` path on vm100, mirroring the Windows layout.
+
 ### After any deploy
 
 ```bash
