@@ -10,9 +10,10 @@ ssh -o BatchMode=yes -o ConnectTimeout=15 vm100 "mkdir -p '$WWW' /var/www/certbo
 
 if [[ -n "$DIST_TGZ" && -f "$DIST_TGZ" ]]; then
   scp -o BatchMode=yes "$DIST_TGZ" vm100:/tmp/srtlovesvlc-dist.tgz
-  ssh -o BatchMode=yes vm100 "rm -rf '$WWW'/* && tar -xzf /tmp/srtlovesvlc-dist.tgz -C '$WWW' && chown -R www-data:www-data '$WWW' 2>/dev/null || true"
+  # Clear the docroot but keep the server-only fulfillment path (private installer downloads).
+  ssh -o BatchMode=yes vm100 "find '$WWW' -mindepth 1 -maxdepth 1 ! -name downloads -exec rm -rf {} + && tar -xzf /tmp/srtlovesvlc-dist.tgz -C '$WWW' && chown -R www-data:www-data '$WWW' 2>/dev/null || true"
 elif [[ -d "$ROOT/dist" ]]; then
-  rsync -avz --delete "$ROOT/dist/" "root@vm100:$WWW/"
+  rsync -avz --delete --exclude 'downloads/' "$ROOT/dist/" "root@vm100:$WWW/"
 else
   echo "Need dist/ or a dist tarball path" >&2
   exit 1

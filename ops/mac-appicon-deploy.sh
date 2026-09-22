@@ -49,7 +49,8 @@ npm run build
 [[ -d dist ]] || die "dist missing"
 
 ssh -o BatchMode=yes -o ConnectTimeout=15 vm100 "mkdir -p '$WWW'"
-rsync -avz --delete "$ROOT/dist/" "root@vm100:$WWW/"
+# Keep the server-only fulfillment path (private installer downloads).
+rsync -avz --delete --exclude 'downloads/' "$ROOT/dist/" "root@vm100:$WWW/"
 ssh -o BatchMode=yes vm100 "chown -R techex:techex '$WWW' 2>/dev/null || chown -R www-data:www-data '$WWW' 2>/dev/null || true"
 
 echo "=== smoke ==="
