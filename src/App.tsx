@@ -5,7 +5,7 @@ import { MenuBarStage } from './components/MenuBarStage'
 import { Nav } from './components/Nav'
 import { usePlatform } from './hooks/usePlatform'
 import { useReveal } from './hooks/useReveal'
-import { WINDOWS_BUY_URL } from './links'
+import { MAC_BUY_URL, PRICE, WINDOWS_BUY_URL } from './links'
 
 const features: Array<{ title: string; body: string; icon: IconName }> = [
   {
@@ -136,8 +136,9 @@ export default function App() {
               Mac and Windows.
             </h2>
             <p className="lede">
-              macOS is headed to the Mac App Store. Windows is available now as
-              a direct sale — same bridge idea: claim{' '}
+              {MAC_BUY_URL
+                ? 'Both sold direct, one-time, no subscription. Same bridge idea on each: claim '
+                : 'macOS is headed to the Mac App Store. Windows is available now as a direct sale. Same bridge idea on each: claim '}
               <code className="inline-code">srt://</code>, hand off to the VLC
               you already use.
             </p>
@@ -145,13 +146,40 @@ export default function App() {
           <div className="platform-cards" id="pricing">
             <div className="platform-card platform-card--live">
               <div className="platform-card__os">macOS</div>
-              <div className="platform-card__price">Price TBA · Mac App Store</div>
-              <div className="platform-card__status">Menu bar · Coming to Mac App Store</div>
-              <p>Scheme handler, Login Item, recent streams, latency, reuse VLC.</p>
+              {MAC_BUY_URL ? (
+                <>
+                  <div className="platform-card__price">{PRICE} · one-time purchase</div>
+                  <div className="platform-card__status">Menu bar · Available now · Mac App Store listing to follow</div>
+                  <p>
+                    Claims <code className="inline-code">srt://</code> and launches
+                    your installed VLC. Notarized DMG, drag to Applications.
+                    After checkout you land on a private download page.
+                  </p>
+                  <div className="platform-card__actions">
+                    <a
+                      className="btn btn--primary"
+                      href={MAC_BUY_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Buy for Mac · {PRICE}
+                    </a>
+                    <a className="btn btn--ghost" href="/eula.html">
+                      EULA
+                    </a>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="platform-card__price">Price TBA · Mac App Store</div>
+                  <div className="platform-card__status">Menu bar · Coming to Mac App Store</div>
+                  <p>Scheme handler, Login Item, recent streams, latency, reuse VLC.</p>
+                </>
+              )}
             </div>
             <div className="platform-card platform-card--live">
               <div className="platform-card__os">Windows</div>
-              <div className="platform-card__price">$1.99 · one-time purchase</div>
+              <div className="platform-card__price">{PRICE} · one-time purchase</div>
               <div className="platform-card__status">Tray · Available now</div>
               <p>
                 Claims <code className="inline-code">srt://</code> and launches
@@ -166,7 +194,7 @@ export default function App() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Buy for Windows · $1.99
+                  Buy for Windows · {PRICE}
                 </a>
                 <a className="btn btn--ghost" href="/eula.html">
                   EULA

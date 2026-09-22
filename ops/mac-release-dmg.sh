@@ -27,6 +27,8 @@ SCHEME="${SCHEME:-SRTlovesVLC}"
 TEAM_ID="${TEAM_ID:-}"
 NOTARY_PROFILE="${NOTARY_PROFILE:-srtlovesvlc-notary}"
 OUT_DIR="${OUT_DIR:-$ROOT/release}"
+# Private fulfillment path token on vm100 (downloads/m/<token>/). The Stripe success URL points here.
+MAC_TOKEN="${MAC_TOKEN:-590dff82095845eb31d0114f7a7a2269}"
 WORK="$(mktemp -d /tmp/srtlovesvlc-dmg.XXXXXX)"
 
 die() { echo "error: $*" >&2; exit 1; }
@@ -116,11 +118,13 @@ cat <<EOT
 Done: $DMG
   version $VERSION ($BUILD), notarized submission $NOTARY_ID
 
-To publish under a private fulfillment path on vm100 (mirrors the Windows layout):
-  TOKEN=\$(openssl rand -hex 16)
-  ssh vm100 "sudo mkdir -p /var/www/srtlovesvlc.com/downloads/m/\$TOKEN"
+To publish: the Mac fulfillment page already lives at
+  /var/www/srtlovesvlc.com/downloads/m/$MAC_TOKEN/index.html
+and links to $(basename "$DMG"). Upload next to it and fill in the checksum:
   scp "$DMG" "$DMG.sha256" vm100:/tmp/
-  ssh vm100 "sudo mv /tmp/$(basename "$DMG") /tmp/$(basename "$DMG").sha256 /var/www/srtlovesvlc.com/downloads/m/\$TOKEN/ && sudo chown -R techex:techex /var/www/srtlovesvlc.com/downloads/m"
-  echo "https://srtlovesvlc.com/downloads/m/\$TOKEN/$(basename "$DMG")"
-Then point a fulfillment index.html at it, as downloads/w/ does for Windows.
+  ssh vm100 "sudo mv /tmp/$(basename "$DMG") /tmp/$(basename "$DMG").sha256 /var/www/srtlovesvlc.com/downloads/m/$MAC_TOKEN/ \\
+    && sudo sed -i 's/SHA256_PLACEHOLDER/$(cut -d' ' -f1 "$DMG.sha256")/' /var/www/srtlovesvlc.com/downloads/m/$MAC_TOKEN/index.html \\
+    && sudo chown -R techex:techex /var/www/srtlovesvlc.com/downloads/m"
+  curl -sI https://srtlovesvlc.com/downloads/m/$MAC_TOKEN/$(basename "$DMG") | head -1
+If the version changed, also update the DMG filename in that index.html.
 EOT

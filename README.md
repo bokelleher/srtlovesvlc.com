@@ -78,7 +78,11 @@ Static files go live on copy; there is nothing to restart.
 TEAM_ID=TEAMID1234 ./ops/mac-release-dmg.sh
 ```
 
-The script ends by printing the commands to publish the DMG under a tokenised `downloads/m/<token>/` path on vm100, mirroring the Windows layout.
+The script ends by printing the commands to upload the DMG next to the Mac fulfillment page at `downloads/m/<token>/index.html` on vm100 and fill in its checksum. That page mirrors the Windows one under `downloads/w/`.
+
+### Direct sales
+
+Both platforms sell through Stripe Payment Links whose success URL is the private fulfillment page. The links live in `src/links.ts`. `MAC_BUY_URL` is empty until the Mac link exists; while it is empty the site shows "Coming to the Mac App Store" and no Mac buy button, so the Mac path can be deployed ahead of the link with nothing to hide.
 
 ### After any deploy
 
