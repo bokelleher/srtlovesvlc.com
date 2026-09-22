@@ -8,7 +8,14 @@ mkdirSync(out, { recursive: true })
 
 for (const name of ['app-icon.png', 'favicon-32.png', 'apple-touch-icon.png']) {
   const b64path = join(root, 'scripts', name + '.b64')
-  if (!existsSync(b64path)) throw new Error('missing ' + b64path)
+  if (!existsSync(b64path)) {
+    // The committed PNG in public/ is the source of truth when no b64 copy exists.
+    if (existsSync(join(out, name))) {
+      console.log('kept', name, '(no b64 copy)')
+      continue
+    }
+    throw new Error('missing ' + b64path)
+  }
   const b64 = readFileSync(b64path, 'utf8').trim()
   const buf = Buffer.from(b64, 'base64')
   writeFileSync(join(out, name), buf)
