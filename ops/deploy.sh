@@ -17,5 +17,10 @@ if [[ ! -d "$DIST" ]]; then
   echo "Build first: npm run build" >&2
   exit 1
 fi
-rsync -avz --delete "$DIST/" "$DEST/"
+# Keep server-only fulfillment assets (private download path, legal pages).
+rsync -avz --delete \
+  --exclude 'downloads/' \
+  --exclude 'eula.html' \
+  --exclude 'privacy.html' \
+  "$DIST/" "$DEST/"
 echo "Deployed $DIST -> $DEST"

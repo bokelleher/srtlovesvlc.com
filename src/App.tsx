@@ -3,6 +3,9 @@ import { MenuPreview } from './components/MenuPreview'
 import { Nav } from './components/Nav'
 import { useReveal } from './hooks/useReveal'
 
+const WINDOWS_BUY_URL =
+  'https://buy.stripe.com/5kQ4gA8WP4Me7Cs00gafS00'
+
 const features = [
   {
     title: 'Claims srt://',
@@ -123,13 +126,13 @@ export default function App() {
           <div>
             <p className="eyebrow">Platforms</p>
             <h2 id="platforms-title" className="h2">
-              Mac first. Windows next.
+              Mac and Windows.
             </h2>
             <p className="lede">
-              Today: a macOS menu-bar app, headed to the Mac App Store. A
-              Windows tray companion that claims{' '}
-              <code className="inline-code">srt://</code> the same way is on
-              the roadmap — same idea, same handoff to VLC.
+              macOS is headed to the Mac App Store. Windows is available now as
+              a direct sale — same bridge idea: claim{' '}
+              <code className="inline-code">srt://</code>, hand off to the VLC
+              you already use.
             </p>
           </div>
           <div className="platform-cards">
@@ -138,10 +141,27 @@ export default function App() {
               <div className="platform-card__status">Menu bar · Coming to Mac App Store</div>
               <p>Scheme handler, Login Item, recent streams, latency, reuse VLC.</p>
             </div>
-            <div className="platform-card">
+            <div className="platform-card platform-card--live">
               <div className="platform-card__os">Windows</div>
-              <div className="platform-card__status">Tray · Coming</div>
-              <p>Same bridge pattern: claim srt://, launch the user’s VLC.</p>
+              <div className="platform-card__status">Tray · Available now · $1.99</div>
+              <p>
+                Claims <code className="inline-code">srt://</code> and launches
+                your installed VLC. Requires .NET 8 Desktop Runtime and VLC.
+                Purchase includes the installer download.
+              </p>
+              <div className="platform-card__actions">
+                <a
+                  className="btn btn--primary"
+                  href={WINDOWS_BUY_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Buy for Windows — $1.99
+                </a>
+                <a className="btn btn--ghost" href="/eula.html">
+                  EULA
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -150,12 +170,12 @@ export default function App() {
       <section className="section band cta-lite" aria-labelledby="store-title">
         <div className="container reveal">
           <h2 id="store-title" className="h2">
-            Mac App Store — soon
+            Get the app
           </h2>
           <p className="lede">
-            Distribution is proprietary via the Mac App Store. This site is
-            informational only: no placeholder downloads, no fake “Get the app”
-            links. When the listing is live, it will land here.
+            Windows: buy direct for $1.99 — after checkout you land on a private
+            download page for the installer. Mac: proprietary via the Mac App
+            Store; the listing link will land here when it is live.
           </p>
         </div>
       </section>
@@ -168,6 +188,11 @@ export default function App() {
           <p className="footer__note">
             Not affiliated with VideoLAN or the VLC project. VLC is a trademark
             of the VideoLAN non-profit. Requires a separate VLC install.
+          </p>
+          <p className="footer__links">
+            <a href="/privacy.html">Privacy</a>
+            <span aria-hidden="true">·</span>
+            <a href="/eula.html">EULA</a>
           </p>
           <p className="footer__copy">© {new Date().getFullYear()} SRT ❤ VLC</p>
         </div>
