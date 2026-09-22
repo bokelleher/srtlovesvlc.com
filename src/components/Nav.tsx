@@ -21,6 +21,7 @@ export function Nav() {
           <a href="#how">How it works</a>
           <a href="#features">Features</a>
           <a href="#platforms">Platforms</a>
+          <a href="#pricing">Pricing</a>
         </nav>
       </div>
     </header>
