@@ -32,7 +32,7 @@ export function MenuBarStage() {
         </div>
       </div>
       <div className="stage__popover">
-        <div className="menu-preview__title">SRT ❤ VLC</div>
+        <div className="menu-preview__title">SRT ❤️ VLC</div>
         <div className="menu-preview__divider" />
         <div className="menu-preview__section">Recent Streams</div>
         <div className="menu-preview__row">

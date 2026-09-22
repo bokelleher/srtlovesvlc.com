@@ -67,7 +67,7 @@ export default function App() {
               <span className="accent">straight path</span> into VLC
             </h1>
             <p className="hero__lede">
-              SRT ❤ VLC sits in your menu bar or tray, claims the{' '}
+              SRT ❤️ VLC sits in your menu bar or tray, claims the{' '}
               <code className="inline-code">srt://</code> scheme, and launches
               the VLC you already use. No embedded player.
             </p>
@@ -180,7 +180,7 @@ export default function App() {
       <footer className="footer">
         <div className="container footer__inner">
           <div className="footer__brand">
-            SRT <span className="heart">❤</span> VLC
+            SRT <span className="heart">❤️</span> VLC
           </div>
           <p className="footer__note">
             Not affiliated with VideoLAN or the VLC project. VLC is a trademark
@@ -191,7 +191,7 @@ export default function App() {
             <span aria-hidden="true">·</span>
             <a href="/eula.html">EULA</a>
           </p>
-          <p className="footer__copy">© {new Date().getFullYear()} SRT ❤ VLC</p>
+          <p className="footer__copy">© {new Date().getFullYear()} SRT ❤️ VLC</p>
         </div>
       </footer>
     </>

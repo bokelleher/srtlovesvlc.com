@@ -41,7 +41,7 @@ export function Nav() {
           />
           <span className="nav__name">
             SRT <span className="heart" aria-hidden="true">
-              ❤
+              ❤️
             </span>{' '}
             VLC
           </span>
