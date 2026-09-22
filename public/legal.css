@@ -142,9 +142,113 @@ code {
   color: var(--text);
 }
 
+.nav__toggle {
+  display: none;
+}
+
+/* Phone nav: a hamburger that drops the links below the bar. Same rules as the app. */
 @media (max-width: 640px) {
+  .nav__toggle {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 44px;
+    height: 44px;
+    margin-right: -10px;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+
+  .nav__toggle:focus-visible {
+    outline: 2px solid var(--mint);
+    outline-offset: 2px;
+  }
+
+  .nav__bar {
+    display: block;
+    width: 20px;
+    height: 2px;
+    margin: 0 auto;
+    border-radius: 2px;
+    background: var(--text);
+    transition:
+      transform 0.2s ease,
+      opacity 0.2s ease;
+  }
+
+  .nav--open .nav__bar:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  .nav--open .nav__bar:nth-child(2) {
+    opacity: 0;
+  }
+
+  .nav--open .nav__bar:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
   .nav__links {
     display: none;
+    position: absolute;
+    top: var(--nav-h);
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    gap: 0;
+    padding: 4px 20px 12px;
+    font-size: 1.05rem;
+    background: var(--bg-elev);
+    border-bottom: 1px solid rgba(42, 58, 82, 0.65);
+    box-shadow: 0 24px 40px rgba(0, 0, 0, 0.45);
+  }
+
+  .nav--open .nav__links {
+    display: flex;
+  }
+
+  .nav__links a {
+    padding: 13px 0;
+    border-bottom: 1px solid rgba(42, 58, 82, 0.35);
+  }
+
+  .nav__links a:last-child {
+    border-bottom: 0;
+  }
+
+  /* Without JavaScript the toggle cannot work, so show the links as a wrapped row instead. */
+  html:not(.js) .nav__toggle {
+    display: none;
+  }
+
+  html:not(.js) .nav {
+    height: auto;
+    padding: 12px 0;
+  }
+
+  html:not(.js) .nav__inner {
+    flex-wrap: wrap;
+  }
+
+  html:not(.js) .nav__links {
+    display: flex;
+    position: static;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 4px 16px;
+    padding: 0;
+    font-size: 0.92rem;
+    background: none;
+    border: 0;
+  }
+
+  html:not(.js) .nav__links a {
+    padding: 4px 0;
+    border: 0;
   }
 }
 

@@ -1,6 +1,35 @@
+import { useEffect, useState } from 'react'
+
+const links: Array<[href: string, label: string]> = [
+  ['#how', 'How it works'],
+  ['#features', 'Features'],
+  ['#platforms', 'Platforms'],
+  ['#pricing', 'Pricing'],
+]
+
 export function Nav() {
+  const [open, setOpen] = useState(false)
+
+  // Close the phone menu on Escape, and if the viewport grows past the phone breakpoint.
+  useEffect(() => {
+    if (!open) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false)
+    }
+    const mq = window.matchMedia('(min-width: 641px)')
+    const onMq = () => {
+      if (mq.matches) setOpen(false)
+    }
+    window.addEventListener('keydown', onKey)
+    mq.addEventListener('change', onMq)
+    return () => {
+      window.removeEventListener('keydown', onKey)
+      mq.removeEventListener('change', onMq)
+    }
+  }, [open])
+
   return (
-    <header className="nav">
+    <header className={open ? 'nav nav--open' : 'nav'}>
       <div className="nav__inner container">
         <a className="nav__brand" href="#top" aria-label="SRT loves VLC home">
           <img
@@ -17,11 +46,29 @@ export function Nav() {
             VLC
           </span>
         </a>
-        <nav className="nav__links" aria-label="Sections">
-          <a href="#how">How it works</a>
-          <a href="#features">Features</a>
-          <a href="#platforms">Platforms</a>
-          <a href="#pricing">Pricing</a>
+        <button
+          type="button"
+          className="nav__toggle"
+          aria-expanded={open}
+          aria-controls="nav-links"
+          aria-label={open ? 'Close menu' : 'Open menu'}
+          onClick={() => setOpen((o) => !o)}
+        >
+          <span className="nav__bar" />
+          <span className="nav__bar" />
+          <span className="nav__bar" />
+        </button>
+        <nav
+          id="nav-links"
+          className="nav__links"
+          aria-label="Sections"
+          onClick={() => setOpen(false)}
+        >
+          {links.map(([href, label]) => (
+            <a key={href} href={href}>
+              {label}
+            </a>
+          ))}
         </nav>
       </div>
     </header>
