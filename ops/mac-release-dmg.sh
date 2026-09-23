@@ -3,8 +3,9 @@
 # Run on Bo's Mac (Xcode + Developer ID Application certificate in the login keychain).
 #
 # One-time setup on the Mac:
-#   1. Xcode > Signing & Capabilities: enable "Hardened Runtime" on the app target.
-#      Notarization rejects apps without it.
+#   1. Hardened Runtime is forced at archive time (ENABLE_HARDENED_RUNTIME=YES), so the
+#      project does not need it set, but Build Settings > "Enable Hardened Runtime" = Yes
+#      keeps the Xcode build identical. Notarization rejects apps without it.
 #   2. Store notary credentials once (app-specific password from appleid.apple.com):
 #        xcrun notarytool store-credentials srtlovesvlc-notary \
 #          --apple-id you@example.com --team-id TEAMID1234
@@ -47,10 +48,13 @@ EXPORT="$WORK/export"
 STAGE="$WORK/stage"
 
 step "Archive (Release)"
+# ENABLE_HARDENED_RUNTIME is forced here because notarization requires it and newer
+# Xcode no longer exposes it in the capability picker (it is a build setting).
 xcodebuild -project "$PROJECT" -scheme "$SCHEME" -configuration Release \
   -archivePath "$ARCHIVE" archive \
   -destination 'generic/platform=macOS' \
-  DEVELOPMENT_TEAM="$TEAM_ID" | tail -3
+  DEVELOPMENT_TEAM="$TEAM_ID" \
+  ENABLE_HARDENED_RUNTIME=YES | tail -3
 
 step "Export with Developer ID signing"
 cat > "$WORK/exportOptions.plist" <<PLIST
