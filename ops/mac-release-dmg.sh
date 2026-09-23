@@ -50,8 +50,10 @@ STAGE="$WORK/stage"
 step "Archive (Release)"
 # ENABLE_HARDENED_RUNTIME is forced here because notarization requires it and newer
 # Xcode no longer exposes it in the capability picker (it is a build setting).
+# Fresh derived data + clean so the signing step always re-runs with the flag.
 xcodebuild -project "$PROJECT" -scheme "$SCHEME" -configuration Release \
-  -archivePath "$ARCHIVE" archive \
+  -derivedDataPath "$WORK/DerivedData" \
+  -archivePath "$ARCHIVE" clean archive \
   -destination 'generic/platform=macOS' \
   DEVELOPMENT_TEAM="$TEAM_ID" \
   ENABLE_HARDENED_RUNTIME=YES | tail -3
@@ -82,7 +84,24 @@ echo "app: $APP_NAME $VERSION ($BUILD)"
 step "Verify the app signature and hardened runtime"
 codesign --verify --deep --strict --verbose=2 "$APP"
 codesign -d --entitlements :- "$APP" 2>/dev/null | head -20 || true
-codesign -dvv "$APP" 2>&1 | grep -q 'flags=.*runtime' || die "hardened runtime is not enabled on $APP_NAME; turn it on in Xcode and rerun"
+SIG="$(codesign -dvv "$APP" 2>&1)"
+echo "$SIG" | grep -E '^(Authority=|CodeDirectory|Format=)' | head -5
+if ! echo "$SIG" | grep -q 'flags=.*runtime'; then
+  # Xcode's export can drop the runtime flag when it re-signs for Developer ID.
+  # Re-sign in place with the same entitlements, nested code first, then the app.
+  step "Hardened runtime flag missing after export; re-signing with --options runtime"
+  IDENTITY="$(security find-identity -v -p codesigning | grep 'Developer ID Application' | head -1 | sed -E 's/.*"(.*)".*/\1/')"
+  [[ -n "$IDENTITY" ]] || die "could not read the Developer ID Application identity name"
+  codesign -d --entitlements - --xml "$APP" > "$WORK/entitlements.plist" 2>/dev/null \
+    || codesign -d --entitlements :- "$APP" 2>/dev/null | sed -n '/<?xml/,$p' > "$WORK/entitlements.plist"
+  find "$APP/Contents" -depth \( -name '*.framework' -o -name '*.dylib' -o -name '*.xpc' -o -name '*.app' -o -name '*.appex' \) -print0 2>/dev/null \
+    | while IFS= read -r -d '' nested; do
+        codesign --force --options runtime --timestamp --sign "$IDENTITY" "$nested"
+      done
+  codesign --force --options runtime --timestamp --entitlements "$WORK/entitlements.plist" --sign "$IDENTITY" "$APP"
+  codesign --verify --deep --strict --verbose=2 "$APP"
+  codesign -dvv "$APP" 2>&1 | grep -q 'flags=.*runtime' || die "still no hardened runtime flag after re-signing"
+fi
 
 step "Build the DMG"
 mkdir -p "$STAGE" "$OUT_DIR"
